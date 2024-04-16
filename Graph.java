@@ -1,46 +1,35 @@
 import java.util.*;
 
-public class Graph {
-    private int V; //number of vertices
-    private LinkedList<Edge> adjList[];
+class Graph {
+    private Map<Vertex, List<Edge>> adjacencyList;
 
-    class Edge {
-        int dest;
-        int weight;
-
-        Edge(int dest, int weight) {
-            this.dest = dest;
-            this.weight = weight;
-        }
+    public Graph() {
+        this.adjacencyList = new HashMap<>();
     }
 
-
-    Graph(int v){
-        V = v;
-        adjList = new LinkedList[v];
-        for (int i = 0; i < v; i++)
-            adjList[i] = new LinkedList();
-
+    public void addVertex(Vertex vertex) {
+        adjacencyList.put(vertex, new ArrayList<>());
     }
 
-    void addEdge(int src, int dest, int weight){ //add an edge
-        if(src == dest)
-            return; // Exit when we have inner loop
-        for (Edge edge : adjList[src]) {
-            if (edge.dest == dest) {
-                System.out.println("Edge between " + src + " and " + dest + " already exists.");
-                return; // Exit the method if the edge already exists
-            }
-        }
-        adjList[src].add(new Edge(dest, weight));
-        adjList[dest].add(new Edge(src, weight)); //both ways
+    public void addEdge(Vertex source, Vertex destination, int cost) {
+        Edge edge = new Edge();
+        edge.source = source;
+        edge.destination = destination;
+        edge.cost = cost;
+
+        adjacencyList.get(source).add(edge);
+        adjacencyList.get(destination).add(edge); // remove this if it's a directed graph
     }
 
-    void printGraph() {
-        for (int i = 0; i < V; i++) {
-            System.out.println("adjacency list " + i);
-            for(Edge value : adjList[i]){
-                System.out.println("dest: " + value.dest + " weight: " + value.weight);
+    public void printGraph() {
+        for (Map.Entry<Vertex, List<Edge>> entry : adjacencyList.entrySet()) {
+            System.out.print(entry.getKey().id + " -> ");
+            List<Edge> edges = entry.getValue();
+            for (Edge edge : edges) {
+                if(edge.destination.id!=entry.getKey().id)
+                    System.out.print(edge.destination.id + " ");
+                if(edge.source.id!=entry.getKey().id)
+                    System.out.print(edge.source.id + " ");
             }
             System.out.println();
         }
