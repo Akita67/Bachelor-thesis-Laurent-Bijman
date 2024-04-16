@@ -6,4 +6,8 @@ class Vertex {
     protected boolean fast_charging = false;
 
     protected Queue<Agent> queue = new LinkedList<>();
+    public Vertex(int id){
+        this.id = id;
+
+    }
 }
