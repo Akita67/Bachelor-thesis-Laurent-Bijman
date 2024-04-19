@@ -1,3 +1,4 @@
+import java.io.*;
 import java.util.*;
 
 class Graph {
@@ -39,8 +40,9 @@ class Graph {
         Map<Vertex, Integer> time = new HashMap<>();
         Map<Vertex, Vertex> previous = new HashMap<>();
         PriorityQueue<Vertex> priorityQueue = new PriorityQueue<>(Comparator.comparingInt(time::get));
+        boolean charged = false; // need to charged at least one time
+        int charging_t = 0;
 
-        // Initialize distances
         for (Vertex vertex : adjacencyList.keySet()) {
             if (vertex == start) {
                 time.put(vertex, 0);
@@ -50,7 +52,6 @@ class Graph {
             }
             previous.put(vertex, null);
         }
-
         while (!priorityQueue.isEmpty()) {
             Vertex current = priorityQueue.poll();
             if (current == end) {
@@ -61,13 +62,34 @@ class Graph {
                 int newDistance = time.get(current) + neighbor.cost;
 
                 if (neighbor.destination.charging_station) {
-                    // Add charging time if it's a charging spot
-                    if(neighbor.destination.fast_charging)
-                        newDistance += newDistance/2;
-                    else
-                        newDistance += newDistance;
+                    charged = true;
+                    if(neighbor.destination.time_first==0){
+                        neighbor.destination.time_first = newDistance;
+                    }
+
+                    if(neighbor.destination.fast_charging) { charging_t = newDistance / 2;}
+                    else{ charging_t = newDistance;}
+                    neighbor.destination.queue.add(charging_t);
+
+                    int waiting_t = 0;
+                    int all_waiting_t = 0;
+                    for (int i = 0; i < neighbor.destination.queue.size()-1; i++) {
+                        all_waiting_t += neighbor.destination.queue.get(i);
+                    }
+                    waiting_t = Math.max(0,neighbor.destination.time_first + all_waiting_t - newDistance);
+
+
+                    newDistance += charging_t + waiting_t;
+
+                    neighbor.destination.queue.remove(neighbor.destination.queue.size()-1);
+
                 }
 
+
+                if(neighbor.destination == end && !charged){ // Don't want to allow finishing without charging
+                    newDistance = Integer.MAX_VALUE;}
+
+                // allows to not go back to already previously seen node (if the weights are higher than before)
                 if (newDistance < time.get(neighbor.destination)) {
                     time.put(neighbor.destination, newDistance);
                     previous.put(neighbor.destination, current);
@@ -83,11 +105,13 @@ class Graph {
             path.add(current);
             current = previous.get(current);
         }
+
         Collections.reverse(path);
         return path;
     }
     public Map<Vertex, List<Edge>> getAdjacencyList(){
         return adjacencyList;
     }
+
 
 }

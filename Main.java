@@ -1,8 +1,9 @@
 import java.util.*;
+import java.io.*;
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException, ClassNotFoundException {
 
-        Graph graph = new Graph();
+        Graph graph = new Graph(); // For simulations
         Random rand = new Random();
 
         // Create vertices
@@ -23,25 +24,34 @@ public class Main {
         graph.addVertex(v6);
 
         // Add edges
-        graph.addEdge(v1, v2, rand.nextInt(1,10));
-        graph.addEdge(v1, v3, rand.nextInt(1,10));
-        graph.addEdge(v2, v4, rand.nextInt(1,10));
-        graph.addEdge(v3, v5, rand.nextInt(1,10));
-        graph.addEdge(v4, v6, rand.nextInt(1,10));
-        graph.addEdge(v5, v6, rand.nextInt(1,10));
+        graph.addEdge(v1, v2, 1); //rand.nextInt(1,10)
+        graph.addEdge(v1, v3, 3);
+        graph.addEdge(v2, v4, 1);
+        graph.addEdge(v3, v5, 3);
+        graph.addEdge(v4, v6,1);
+        graph.addEdge(v5, v6,1);
 
         // Print
         System.out.println("Graph representation:");
         graph.printGraph();
 
+
         List<Vertex> shortestPath = graph.shortestPath(v1, v6);
-
         Agent a1 = new Agent(1);
-        Agent a2 = new Agent(2);
-
-        // Let agents travel along the shortest path
         a1.travel(graph, shortestPath);
-        a2.travel(graph, shortestPath);
+
+        List<Vertex> shortestPath2 = graph.shortestPath(v1, v6);
+        Agent a2 = new Agent(2);
+        a2.travel(graph, shortestPath2);
+
+        List<Vertex> shortestPath3 = graph.shortestPath(v1, v6);
+        Agent a3 = new Agent(3);
+        a3.travel(graph, shortestPath3);
+
+        List<Vertex> shortestPath4 = graph.shortestPath(v1, v6);
+        Agent a4 = new Agent(4);
+        a4.travel(graph, shortestPath4);
+
 
     }
 }
