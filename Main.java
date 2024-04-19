@@ -11,7 +11,7 @@ public class Main {
         Vertex v2 = new Vertex(2);
         Vertex v3 = new Vertex(3);
         Vertex v4 = new Vertex(4);v4.charging_station=true;
-        Vertex v5 = new Vertex(5);v5.charging_station=true;v5.fast_charging=true;
+        Vertex v5 = new Vertex(5);//v5.charging_station=true;v5.fast_charging=true;
         Vertex v6 = new Vertex(6);
 
 

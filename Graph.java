@@ -40,7 +40,6 @@ class Graph {
         Map<Vertex, Integer> time = new HashMap<>();
         Map<Vertex, Vertex> previous = new HashMap<>();
         PriorityQueue<Vertex> priorityQueue = new PriorityQueue<>(Comparator.comparingInt(time::get));
-        boolean charged = false; // need to charged at least one time
         int charging_t = 0;
 
         for (Vertex vertex : adjacencyList.keySet()) {
@@ -51,6 +50,7 @@ class Graph {
                 time.put(vertex, Integer.MAX_VALUE);
             }
             previous.put(vertex, null);
+            vertex.set_EV_has_charged(false);
         }
         while (!priorityQueue.isEmpty()) {
             Vertex current = priorityQueue.poll();
@@ -61,8 +61,8 @@ class Graph {
             for (Edge neighbor : edges) {
                 int newDistance = time.get(current) + neighbor.cost;
 
-                if (neighbor.destination.charging_station) {
-                    charged = true;
+                if (neighbor.destination.charging_station && !current.EV_has_charged) {
+                    neighbor.destination.set_EV_has_charged(true);
                     if(neighbor.destination.time_first==0){
                         neighbor.destination.time_first = newDistance;
                     }
@@ -84,9 +84,11 @@ class Graph {
                     neighbor.destination.queue.remove(neighbor.destination.queue.size()-1);
 
                 }
+                if(current.EV_has_charged){ // The EV has already been charged so don't need to charge it again
+                    neighbor.destination.set_EV_has_charged(true);
+                }
 
-
-                if(neighbor.destination == end && !charged){ // Don't want to allow finishing without charging
+                if(neighbor.destination == end && !neighbor.destination.EV_has_charged){ // Don't want to allow finishing without charging
                     newDistance = Integer.MAX_VALUE;}
 
                 // allows to not go back to already previously seen node (if the weights are higher than before)
