@@ -6,10 +6,10 @@ class Vertex {
     protected int id;
     protected boolean charging_station = false;
     protected boolean fast_charging = false;
-    protected int time_first = 0;
+    protected double time_first = 0;
     protected boolean EV_has_charged = false;
 
-    protected List<Integer> queue = new LinkedList<>();
+    protected List<Double> queue = new LinkedList<>();
     public Vertex(int id){
         this.id = id;
 

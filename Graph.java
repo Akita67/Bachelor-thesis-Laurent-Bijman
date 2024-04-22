@@ -3,6 +3,7 @@ import java.util.*;
 
 class Graph {
     protected Map<Vertex, List<Edge>> adjacencyList;
+    protected final double max_range_time = 50;
 
     public Graph() {
         this.adjacencyList = new HashMap<>();
@@ -35,19 +36,19 @@ class Graph {
             System.out.println();
         }
     }
-    // Greedy Algorithm to find the shortest path
+    // Greedy Algorithm to find the shortest path works when they all start at the same position
     public List<Vertex> shortestPath(Vertex start, Vertex end) {
-        Map<Vertex, Integer> time = new HashMap<>();
+        Map<Vertex, Double> time = new HashMap<>();
         Map<Vertex, Vertex> previous = new HashMap<>();
-        PriorityQueue<Vertex> priorityQueue = new PriorityQueue<>(Comparator.comparingInt(time::get));
-        int charging_t = 0;
+        PriorityQueue<Vertex> priorityQueue = new PriorityQueue<>(Comparator.comparingDouble(time::get));
+        double charging_t = 0;
 
         for (Vertex vertex : adjacencyList.keySet()) {
             if (vertex == start) {
-                time.put(vertex, 0);
+                time.put(vertex, 0.0);
                 priorityQueue.add(vertex);
             } else {
-                time.put(vertex, Integer.MAX_VALUE);
+                time.put(vertex, Double.MAX_VALUE);
             }
             previous.put(vertex, null);
             vertex.set_EV_has_charged(false);
@@ -59,20 +60,21 @@ class Graph {
             }
             List<Edge> edges = adjacencyList.get(current);
             for (Edge neighbor : edges) {
-                int newDistance = time.get(current) + neighbor.cost;
-
+                double newDistance = time.get(current) + neighbor.cost;
                 if (neighbor.destination.charging_station && !current.EV_has_charged) {
                     neighbor.destination.set_EV_has_charged(true);
                     if(neighbor.destination.time_first==0){
                         neighbor.destination.time_first = newDistance;
                     }
 
-                    if(neighbor.destination.fast_charging) { charging_t = newDistance / 2;}
-                    else{ charging_t = newDistance;}
+                    System.out.println(newDistance);
+                    if(neighbor.destination.fast_charging) { charging_t = (newDistance/max_range_time)*30;} // Need to adapt this to actual charging
+                    else{ charging_t = (newDistance/max_range_time)*60;} // Need to adapt it (we can assume it's linear)
                     neighbor.destination.queue.add(charging_t);
 
-                    int waiting_t = 0;
-                    int all_waiting_t = 0;
+
+                    double waiting_t = 0;
+                    double all_waiting_t = 0;
                     for (int i = 0; i < neighbor.destination.queue.size()-1; i++) {
                         all_waiting_t += neighbor.destination.queue.get(i);
                     }
@@ -89,7 +91,7 @@ class Graph {
                 }
 
                 if(neighbor.destination == end && !neighbor.destination.EV_has_charged){ // Don't want to allow finishing without charging
-                    newDistance = Integer.MAX_VALUE;}
+                    newDistance = Double.MAX_VALUE;}
 
                 // allows to not go back to already previously seen node (if the weights are higher than before)
                 if (newDistance < time.get(neighbor.destination)) {
