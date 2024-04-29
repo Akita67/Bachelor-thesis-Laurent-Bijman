@@ -1,7 +1,7 @@
 import java.util.*;
 import java.io.*;
 public class Main {
-    public static void main(String[] args) throws IOException, ClassNotFoundException {
+    public static void main(String[] args) {
 
         Graph graph = new Graph(); // For simulations
         Random rand = new Random();

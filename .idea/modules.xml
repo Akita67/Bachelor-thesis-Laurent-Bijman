@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/iterative/iterative.iml" filepath="$PROJECT_DIR$/iterative/iterative.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/thesis.iml" filepath="$PROJECT_DIR$/.idea/thesis.iml" />
     </modules>
   </component>
