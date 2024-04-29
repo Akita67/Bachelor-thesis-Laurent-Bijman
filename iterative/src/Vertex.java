@@ -9,6 +9,9 @@ class Vertex {
 
     public Vertex(int id) {
         this.id = id;
-        // Initialize other properties
+    }
+
+    public int getId() {
+        return id;
     }
 }
