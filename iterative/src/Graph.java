@@ -41,24 +41,28 @@ class Graph {
             for (Edge neighbor : edges) {
                 double newDistance = time.get(current);
                 double waiting = 0;
+                double total_waiting = 0;
                 double charging_t = 0;
 
                 if(current.charging_station && !agent.did_charge){
-                    agent.setDid_charge(true);
+                    agent.setDid_charge();
                     List<Agent> list = null;
                     for(Agent a : agents){
                         if(a.currentPosition.equals(neighbor.destination.charging_station)){
                             list.add(a);
                         }
                     }
-                    if(list != null){ // TODO works with one only (don't know if that is a problem)
-                        waiting = Math.max((list.get(0).current_distance + list.get(0).charging_time) - agent.current_distance,0);
+                    if(list != null){
+
+                        for(Agent a : list){
+                            total_waiting += a.charging_time;
+                        }
+                        waiting = Math.max((list.get(0).current_distance + total_waiting) - agent.current_distance,0);
                     }
 
-                    // TODO check in all the agents if someone is in the charging (same node)
-                    // TODO if not do the charging calculation (fast or slow)
                     if(current.fast_charging){charging_t = (newDistance/agent.max_energy_tank)*30;}
                     else{charging_t = (newDistance/agent.max_energy_tank)*60;}
+                    //agent.setCharging_time(charging_t); //TODO see if this will fuck up the problem, maybe need to add it in the gameManagers
                 }
 
                 newDistance = time.get(current) + neighbor.weight + waiting + charging_t;

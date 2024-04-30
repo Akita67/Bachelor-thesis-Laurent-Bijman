@@ -15,7 +15,8 @@ class Agent {
     public int getId(){
         return id;
     }
-    public void setDid_charge(boolean value){
-        did_charge = value;
+    public void setDid_charge(){
+        did_charge = true;
     }
+    public void setCharging_time(double value){ charging_time = value;}
 }
