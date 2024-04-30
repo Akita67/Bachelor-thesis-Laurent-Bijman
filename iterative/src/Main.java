@@ -27,7 +27,7 @@ public class Main {
 
         // Add edges to the graph
         // Syntax: addEdge(Vertex source, Vertex destination, int weight)
-        graph.addEdge(v1, v3, 5.0);
+        graph.addEdge(v1, v3, 6.0);
         graph.addEdge(v2, v4, 11.0);
         graph.addEdge(v3, v5, 5.0);
         graph.addEdge(v4, v5, 5.0);

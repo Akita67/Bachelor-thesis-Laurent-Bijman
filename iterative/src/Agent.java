@@ -4,7 +4,7 @@ class Agent {
     int id;
     double max_energy_tank = 100;
     double current_distance = 0;
-    double charging_time = 5;
+    double charging_time = 0;
     boolean did_charge = false;
 
     public Agent(int id, Vertex currentPosition, Vertex destination) {

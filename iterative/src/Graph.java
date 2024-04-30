@@ -22,6 +22,7 @@ class Graph {
         Map<Vertex, Double> time = new HashMap<>();
         Map<Vertex, Vertex> previous = new HashMap<>();
         PriorityQueue<Vertex> priorityQueue = new PriorityQueue<>(Comparator.comparingDouble(time::get));
+        boolean flag = false;
 
         for (Vertex vertex : vertices) {
             if (vertex == start) {
@@ -45,6 +46,7 @@ class Graph {
                 double charging_t = 0;
 
                 if(current.charging_station && !agent.did_charge){
+                    flag = true;
                     agent.setDid_charge();
                     List<Agent> list = null;
                     for(Agent a : agents){
@@ -86,6 +88,8 @@ class Graph {
         }
 
         Collections.reverse(path);
+        if(flag)
+            agent.did_charge=false;
         return path;
     }
 

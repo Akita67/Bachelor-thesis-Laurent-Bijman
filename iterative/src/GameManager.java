@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -7,31 +9,50 @@ class GameManager {
         Agent nextMoveAgent = null;
         double minTotalCost = Double.MAX_VALUE;
         List<Vertex> minpath = null;
+        double totalWaitingTime = 0;
+        double chargingTime = 0;
+        double nextMoveCost = 0;
+        double totalCost = 0;
 
         for (Agent agent : agents) {
             if(agent.currentPosition.equals(agent.destination)){
                 continue;
             }
-            // TODO in here we need to adjust the charging and waiting time
-            List<Vertex> path = dijkstra(graph, agent.currentPosition, agent.destination, agent, agents);
-            double nextMoveCost = getNextMoveCost(path, graph);
-            double totalWaitingTime = getTotalWaitingTime(agents,path.get(0), agent);
-            double chargingTime = getChargingTime(agent, path.get(0));
-            //System.out.println("nextMoveCost " + nextMoveCost);
-            //System.out.println("totalWaitingTime" + totalWaitingTime);
-            //System.out.println("chargingTime "+ chargingTime );
-            double totalCost = agent.current_distance + nextMoveCost + totalWaitingTime + chargingTime;
-
-            if (totalCost < minTotalCost) {
+            else if(agent.currentPosition.charging_station && !agent.did_charge){
+                totalWaitingTime = getTotalWaitingTime(agents, agent);
+                chargingTime = getChargingTime(agent, agent.currentPosition);
+                totalCost = agent.current_distance + totalWaitingTime + chargingTime;
                 minTotalCost = totalCost;
                 nextMoveAgent = agent;
-                minpath = path;
+                minpath = null;
+                agent.setDid_charge();
+                break;
             }
+            else{
+                List<Vertex> path = dijkstra(graph, agent.currentPosition, agent.destination, agent, agents);
+                nextMoveCost = getNextMoveCost(path, graph);
+                totalCost = agent.current_distance + nextMoveCost;
+                if (totalCost < minTotalCost) {
+                    minTotalCost = totalCost;
+                    nextMoveAgent = agent;
+                    minpath = path;
+                }
+            }
+            //System.out.println("nextMoveCost " + nextMoveCost);
+            //System.out.println("totalWaitingTime " + totalWaitingTime);
+            //System.out.println("chargingTime "+ chargingTime );
+
         }
-        System.out.println("the agent " + (nextMoveAgent.getId()) + " goes to " + (minpath.get(1).getId()));
+        if(minpath == null){
+            System.out.println("the agent " + (nextMoveAgent.getId()) + " stays in " + nextMoveAgent.currentPosition.id);
+        }
+        else{
+            System.out.println("the agent " + (nextMoveAgent.getId()) + " goes to " + (minpath.get(1).getId()));
+            nextMoveAgent.currentPosition = minpath.get(1);
+        }
         System.out.println("The cost of the agent is " + (minTotalCost));
         nextMoveAgent.current_distance = minTotalCost;
-        nextMoveAgent.currentPosition = minpath.get(1);
+
         return nextMoveAgent;
     }
 
@@ -45,23 +66,28 @@ class GameManager {
 
         return graph.getEdge(path.get(0),path.get(1)).getWeight();
     }
-    private double getTotalWaitingTime(List<Agent> agents, Vertex destination, Agent agent){
-        List<Agent> list = null;
+    private double getTotalWaitingTime(List<Agent> agents, Agent agent){ //TODO if someone already charged and it's in the charging node(for passing) should not take his charging time into consideration
+        List<Agent> list = new ArrayList<>();
         double total_waiting = 0;
         double waiting = 0;
         for(Agent a : agents){
-            //TODO curious to see if there is not a charging station at the end if it will not add anything
-            // I hope it will have a empty list and just return waiting 0
-            if(a.currentPosition.equals(destination.charging_station)){
+            if(a.currentPosition.equals(agent.currentPosition)){
                 list.add(a);
             }
         }
-        if(list != null){
-
+        if(list.size()>1){
+            double smallest_distance = Double.MAX_VALUE;
             for(Agent a : list){
                 total_waiting += a.charging_time;
+                if(a.current_distance - a.charging_time<smallest_distance)
+                    smallest_distance = a.current_distance - a.charging_time;
             }
-            waiting = Math.max((list.get(0).current_distance + total_waiting) - agent.current_distance,0);
+            // TODO need to take the smallest current_distance in the list
+            System.out.println("those are the values for the waiting sum");
+            System.out.println(smallest_distance);
+            System.out.println(total_waiting);
+            System.out.println(agent.current_distance);
+            waiting = Math.max((smallest_distance + total_waiting) - agent.current_distance,0);
         }
         return waiting;
     }
