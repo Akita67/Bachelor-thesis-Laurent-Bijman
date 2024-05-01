@@ -25,7 +25,6 @@ class GameManager {
                 minTotalCost = totalCost;
                 nextMoveAgent = agent;
                 minpath = null;
-                agent.setDid_charge();
                 break;
             }
             else{
@@ -66,23 +65,22 @@ class GameManager {
 
         return graph.getEdge(path.get(0),path.get(1)).getWeight();
     }
-    private double getTotalWaitingTime(List<Agent> agents, Agent agent){ //TODO if someone already charged and it's in the charging node(for passing) should not take his charging time into consideration
+    protected double getTotalWaitingTime(List<Agent> agents, Agent agent){
         List<Agent> list = new ArrayList<>();
         double total_waiting = 0;
         double waiting = 0;
         for(Agent a : agents){
-            if(a.currentPosition.equals(agent.currentPosition)){
+            if(a.currentPosition.equals(agent.currentPosition) && a.currentPosition.equals(a.charging_station)){
                 list.add(a);
             }
         }
-        if(list.size()>1){
+        if(list.size()>0){
             double smallest_distance = Double.MAX_VALUE;
             for(Agent a : list){
                 total_waiting += a.charging_time;
                 if(a.current_distance - a.charging_time<smallest_distance)
                     smallest_distance = a.current_distance - a.charging_time;
             }
-            // TODO need to take the smallest current_distance in the list
             System.out.println("those are the values for the waiting sum");
             System.out.println(smallest_distance);
             System.out.println(total_waiting);
@@ -91,13 +89,16 @@ class GameManager {
         }
         return waiting;
     }
-    private double getChargingTime(Agent agent, Vertex node){
+    protected double getChargingTime(Agent agent, Vertex node){
         double charging_t = 0;
         if(node.charging_station){
             if(node.fast_charging){charging_t = (agent.current_distance/agent.max_energy_tank)*30;}
             else{charging_t = (agent.current_distance/agent.max_energy_tank)*60;}
-            agent.setCharging_time(charging_t);
         }
+        agent.setCharging_time(charging_t);
+        agent.setDid_charge();
+        agent.setCharging_station(node);
+
         return charging_t;
     }
 }

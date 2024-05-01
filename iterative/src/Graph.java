@@ -42,29 +42,13 @@ class Graph {
             for (Edge neighbor : edges) {
                 double newDistance = time.get(current);
                 double waiting = 0;
-                double total_waiting = 0;
                 double charging_t = 0;
 
                 if(current.charging_station && !agent.did_charge){
                     flag = true;
-                    agent.setDid_charge();
-                    List<Agent> list = null;
-                    for(Agent a : agents){
-                        if(a.currentPosition.equals(neighbor.destination.charging_station)){
-                            list.add(a);
-                        }
-                    }
-                    if(list != null){
-
-                        for(Agent a : list){
-                            total_waiting += a.charging_time;
-                        }
-                        waiting = Math.max((list.get(0).current_distance + total_waiting) - agent.current_distance,0);
-                    }
-
-                    if(current.fast_charging){charging_t = (newDistance/agent.max_energy_tank)*30;}
-                    else{charging_t = (newDistance/agent.max_energy_tank)*60;}
-                    //agent.setCharging_time(charging_t); //TODO see if this will fuck up the problem, maybe need to add it in the gameManagers
+                    GameManager gameManager = new GameManager();
+                    waiting = gameManager.getTotalWaitingTime(agents,agent);
+                    charging_t = gameManager.getChargingTime(agent,current);
                 }
 
                 newDistance = time.get(current) + neighbor.weight + waiting + charging_t;
@@ -88,8 +72,12 @@ class Graph {
         }
 
         Collections.reverse(path);
-        if(flag)
+        if(flag){
             agent.did_charge=false;
+            agent.charging_station=null;
+            agent.charging_time=0;
+        }
+
         return path;
     }
 
