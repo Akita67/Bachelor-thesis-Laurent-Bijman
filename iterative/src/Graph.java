@@ -35,8 +35,8 @@ class Graph {
         }
         while (!priorityQueue.isEmpty()) {
             Vertex current = priorityQueue.poll();
-            if (current == end) {
-                break; // Found the shortest path to the end vertex
+            if (current == end && !agent.did_charge) {
+                time.put(end, Double.MAX_VALUE);
             }
             List<Edge> edges = getOutgoingEdges(current);
             for (Edge neighbor : edges) {
@@ -52,8 +52,6 @@ class Graph {
                 }
 
                 newDistance = time.get(current) + neighbor.weight + waiting + charging_t;
-                if(neighbor.destination == end && !agent.did_charge){ // Don't want to allow finishing without charging
-                    newDistance = Double.MAX_VALUE;}
 
                 // allows to not go back to already previously seen node (if the weights are higher than before)
                 if (newDistance < time.get(neighbor.destination)) {
