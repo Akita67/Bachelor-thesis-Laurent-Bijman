@@ -1,10 +1,9 @@
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 class GameManager {
     // Method to determine which agent moves first
+    final boolean DEBUG = false;
     public Agent determineNextMove(List<Agent> agents, Graph graph) {
         Agent nextMoveAgent = null;
         double minTotalCost = Double.MAX_VALUE;
@@ -18,38 +17,36 @@ class GameManager {
             if(agent.currentPosition.equals(agent.destination)){
                 continue;
             }
-            else if(agent.currentPosition.charging_station && !agent.did_charge){
-                totalWaitingTime = getTotalWaitingTime(agents, agent);
+            if(agent.currentPosition.charging_station && !agent.did_charge){
+                totalWaitingTime = getTotalWaitingTime(agents, agent.current_distance, agent.currentPosition);
+                System.out.println("this is the waiting time in the GameManager " + totalWaitingTime);
+                //if(totalWaitingTime==0){
                 chargingTime = getChargingTime(agent, agent.currentPosition);
                 totalCost = agent.current_distance + totalWaitingTime + chargingTime;
                 minTotalCost = totalCost;
                 nextMoveAgent = agent;
                 minpath = null;
                 break;
+
             }
-            else{
-                List<Vertex> path = dijkstra(graph, agent.currentPosition, agent.destination, agent, agents);
-                nextMoveCost = getNextMoveCost(path, graph);
-                totalCost = agent.current_distance + nextMoveCost;
-                if (totalCost < minTotalCost) {
-                    minTotalCost = totalCost;
-                    nextMoveAgent = agent;
-                    minpath = path;
-                }
+            List<Vertex> path = dijkstra(graph, agent.currentPosition, agent.destination, agent, agents);
+            nextMoveCost = getNextMoveCost(path, graph);
+            totalCost = agent.current_distance + nextMoveCost;
+            if (totalCost < minTotalCost) {
+                minTotalCost = totalCost;
+                nextMoveAgent = agent;
+                minpath = path;
             }
-            //System.out.println("nextMoveCost " + nextMoveCost);
-            //System.out.println("totalWaitingTime " + totalWaitingTime);
-            //System.out.println("chargingTime "+ chargingTime );
 
         }
         if(minpath == null){
-            System.out.println("the agent " + (nextMoveAgent.getId()) + " stays in " + nextMoveAgent.currentPosition.id);
+            if(DEBUG)System.out.println("the agent " + (nextMoveAgent.getId()) + " stays in " + nextMoveAgent.currentPosition.id);
         }
         else{
-            System.out.println("the agent " + (nextMoveAgent.getId()) + " goes to " + (minpath.get(1).getId()));
+            if(DEBUG)System.out.println("the agent " + (nextMoveAgent.getId()) + " goes to " + (minpath.get(1).getId()));
             nextMoveAgent.currentPosition = minpath.get(1);
         }
-        System.out.println("The cost of the agent is " + (minTotalCost));
+        if(DEBUG)System.out.println("The cost of the agent is " + (minTotalCost));
         nextMoveAgent.current_distance = minTotalCost;
 
         return nextMoveAgent;
@@ -65,12 +62,12 @@ class GameManager {
 
         return graph.getEdge(path.get(0),path.get(1)).getWeight();
     }
-    protected double getTotalWaitingTime(List<Agent> agents, Agent agent){
+    protected double getTotalWaitingTime(List<Agent> agents, double agent_distance, Vertex current){
         List<Agent> list = new ArrayList<>();
         double total_waiting = 0;
         double waiting = 0;
         for(Agent a : agents){
-            if(a.currentPosition.equals(agent.currentPosition) && a.currentPosition.equals(a.charging_station)){
+            if(a.currentPosition.equals(current) && a.currentPosition.equals(a.charging_station)){
                 list.add(a);
             }
         }
@@ -81,11 +78,7 @@ class GameManager {
                 if(a.current_distance - a.charging_time<smallest_distance)
                     smallest_distance = a.current_distance - a.charging_time;
             }
-            System.out.println("those are the values for the waiting sum");
-            System.out.println(smallest_distance);
-            System.out.println(total_waiting);
-            System.out.println(agent.current_distance);
-            waiting = Math.max((smallest_distance + total_waiting) - agent.current_distance,0);
+            waiting = Math.max((smallest_distance + total_waiting) - agent_distance,0);
         }
         return waiting;
     }
@@ -100,5 +93,51 @@ class GameManager {
         agent.setCharging_station(node);
 
         return charging_t;
+    }
+    public Agent BrutdetermineNextMove(List<Agent> agents, Graph graph) {
+        Agent nextMoveAgent = null;
+        double minTotalCost = Double.MAX_VALUE;
+        List<Vertex> minpath = null;
+        double totalWaitingTime = 0;
+        double chargingTime = 0;
+        double nextMoveCost = 0;
+        double totalCost = 0;
+
+        for (Agent agent : agents) {
+            if(agent.currentPosition.equals(agent.destination)){
+                continue;
+            }
+            if(agent.currentPosition.equals(agent.charging_station) && !agent.did_charge){
+                totalWaitingTime = getTotalWaitingTime(agents, agent.current_distance, agent.currentPosition);
+                System.out.println("this is the waiting time in the GameManager " + totalWaitingTime);
+                chargingTime = getChargingTime(agent, agent.currentPosition);
+                totalCost = agent.current_distance + totalWaitingTime + chargingTime;
+                minTotalCost = totalCost;
+                nextMoveAgent = agent;
+                minpath = null;
+                break;
+
+            }
+            List<Vertex> path = graph.Brut_shortestPath(agent.currentPosition, agent.destination, agent, agents);
+            nextMoveCost = getNextMoveCost(path, graph);
+            totalCost = agent.current_distance + nextMoveCost;
+            if (totalCost < minTotalCost) {
+                minTotalCost = totalCost;
+                nextMoveAgent = agent;
+                minpath = path;
+            }
+
+        }
+        if(minpath == null){
+            if(DEBUG)System.out.println("the agent " + (nextMoveAgent.getId()) + " stays in " + nextMoveAgent.currentPosition.id);
+        }
+        else{
+            if(DEBUG)System.out.println("the agent " + (nextMoveAgent.getId()) + " goes to " + (minpath.get(1).getId()));
+            nextMoveAgent.currentPosition = minpath.get(1);
+        }
+        if(DEBUG)System.out.println("The cost of the agent is " + (minTotalCost));
+        nextMoveAgent.current_distance = minTotalCost;
+
+        return nextMoveAgent;
     }
 }
