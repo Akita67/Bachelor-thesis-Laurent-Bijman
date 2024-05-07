@@ -19,7 +19,7 @@ class GameManager {
             }
             if(agent.currentPosition.charging_station && !agent.did_charge){
                 totalWaitingTime = getTotalWaitingTime(agents, agent.current_distance, agent.currentPosition);
-                System.out.println("this is the waiting time in the GameManager " + totalWaitingTime);
+                if(DEBUG)System.out.println("this is the waiting time in the GameManager " + totalWaitingTime);
                 //if(totalWaitingTime==0){
                 chargingTime = getChargingTime(agent, agent.currentPosition);
                 totalCost = agent.current_distance + totalWaitingTime + chargingTime;
@@ -109,7 +109,7 @@ class GameManager {
             }
             if(agent.currentPosition.equals(agent.charging_station) && !agent.did_charge){
                 totalWaitingTime = getTotalWaitingTime(agents, agent.current_distance, agent.currentPosition);
-                System.out.println("this is the waiting time in the GameManager " + totalWaitingTime);
+                if(DEBUG)System.out.println("this is the waiting time in the GameManager " + totalWaitingTime);
                 chargingTime = getChargingTime(agent, agent.currentPosition);
                 totalCost = agent.current_distance + totalWaitingTime + chargingTime;
                 minTotalCost = totalCost;

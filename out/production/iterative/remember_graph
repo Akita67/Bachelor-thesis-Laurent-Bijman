@@ -1,4 +1,4 @@
-// 2 agents starting at different position and the agent 1 needs to backtrack in agent 2 path to charge
+    // 2 agents starting at different position and the agent 1 needs to backtrack in agent 2 path to charge
 // Create vertices
 Vertex v1 = new Vertex(1);
 Vertex v2 = new Vertex(2);
@@ -29,3 +29,112 @@ Agent agent1 = new Agent(1,v1,v6);
 Agent agent2 = new Agent(2,v2,v6);
 List<Agent> agents = new ArrayList<>();
 agents.add(agent1);agents.add(agent2);
+
+    // Straight line with 3 agents and 4 charging stations
+// Create vertices
+Vertex v1 = new Vertex(1);
+Vertex v2 = new Vertex(2);v2.charging_station=true;
+Vertex v3 = new Vertex(3);v3.charging_station=true;
+Vertex v4 = new Vertex(4);v4.charging_station=true;
+Vertex v5 = new Vertex(5);v5.charging_station=true;
+Vertex v6 = new Vertex(6);
+
+
+// Add vertices to the graph
+graph.addVertex(v1);
+graph.addVertex(v2);
+graph.addVertex(v3);
+graph.addVertex(v4);
+graph.addVertex(v5);
+graph.addVertex(v6);
+
+
+// Add edges to the graph
+// Syntax: addEdge(Vertex source, Vertex destination, int weight)
+graph.addEdge(v1, v2, 5.0);
+graph.addEdge(v2, v3, 5.0);
+graph.addEdge(v3, v4, 5.0);
+graph.addEdge(v4, v5, 5.0);
+graph.addEdge(v5, v6, 5.0);
+
+
+List<Agent> agents = new ArrayList<>();
+agents.add(new Agent(1, v1, v6));
+agents.add(new Agent(2, v1, v6));
+agents.add(new Agent(3, v1, v6));
+
+    //Manhattan streets with more agents
+// Create vertices
+Vertex v1 = new Vertex(1);
+Vertex v2 = new Vertex(2);
+Vertex v3 = new Vertex(3);
+Vertex v4 = new Vertex(4);v4.charging_station=true;
+Vertex v5 = new Vertex(5);
+Vertex v6 = new Vertex(6);v6.charging_station=true;
+Vertex v7 = new Vertex(7);
+Vertex v8 = new Vertex(8);
+Vertex v9 = new Vertex(9);
+Vertex v10 = new Vertex(10);
+Vertex v11 = new Vertex(11);v11.charging_station=true;
+Vertex v12 = new Vertex(12);
+Vertex v13 = new Vertex(13);v13.charging_station=true;
+Vertex v14 = new Vertex(14);
+Vertex v15 = new Vertex(15);
+
+// Add vertices to the graph
+graph.addVertex(v1);
+graph.addVertex(v2);
+graph.addVertex(v3);
+graph.addVertex(v4);
+graph.addVertex(v5);
+graph.addVertex(v6);
+graph.addVertex(v7);
+graph.addVertex(v8);
+graph.addVertex(v9);
+graph.addVertex(v10);
+graph.addVertex(v11);
+graph.addVertex(v12);
+graph.addVertex(v13);
+graph.addVertex(v14);
+graph.addVertex(v15);
+
+
+// Add edges to the graph
+// Syntax: addEdge(Vertex source, Vertex destination, int weight)
+graph.addEdge(v1, v2, 5.0);
+graph.addEdge(v2, v3, 5.0);
+graph.addEdge(v3, v4, 5.0);
+graph.addEdge(v4, v5, 5.0);
+
+graph.addEdge(v6, v7, 15.0);
+graph.addEdge(v7, v8, 15.0);
+graph.addEdge(v8, v9, 15.0);
+graph.addEdge(v9, v10, 15.0);
+
+graph.addEdge(v11, v12, 5.0);
+graph.addEdge(v12, v13, 5.0);
+graph.addEdge(v13, v14, 5.0);
+graph.addEdge(v14, v15, 5.0);
+
+graph.addEdge(v1, v6, 5.0);
+graph.addEdge(v6, v11, 5.0);
+graph.addEdge(v2, v7, 5.0);
+graph.addEdge(v7, v12, 5.0);
+graph.addEdge(v3, v8, 15.0);
+graph.addEdge(v8, v13, 15.0);
+graph.addEdge(v4, v9, 5.0);
+graph.addEdge(v9, v14, 5.0);
+graph.addEdge(v5, v10, 5.0);
+graph.addEdge(v10, v15, 5.0);
+
+
+List<Agent> agents = new ArrayList<>();
+agents.add(new Agent(1, v1, v10));
+agents.add(new Agent(2, v1, v15));
+agents.add(new Agent(3, v1, v5));
+agents.add(new Agent(4, v1, v10));
+agents.add(new Agent(5, v1, v15));
+agents.add(new Agent(6, v1, v10));
+agents.add(new Agent(7, v1, v15));
+agents.add(new Agent(8, v1, v5));
+agents.add(new Agent(9, v1, v5));
