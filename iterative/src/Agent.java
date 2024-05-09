@@ -1,5 +1,6 @@
 class Agent {
     Vertex currentPosition;
+    Vertex startVertex;
     Vertex destination;
     int id;
     double max_energy_tank = 200;
@@ -11,6 +12,7 @@ class Agent {
     public Agent(int id, Vertex currentPosition, Vertex destination) {
         this.id = id;
         this.currentPosition = currentPosition;
+        this.startVertex = currentPosition;
         this.destination = destination;
     }
     public int getId(){
@@ -28,4 +30,15 @@ class Agent {
         this.charging_time = 0;
         this.did_charge = false;
     }
+    public Vertex getCharging_station(){
+        return this.charging_station;
+    }
+    public Vertex getStart_vertex(){
+        return this.startVertex;
+    }
+    public Vertex getDestination_vertex(){
+        return this.destination;
+    }
+
+
 }
