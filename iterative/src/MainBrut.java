@@ -2,7 +2,11 @@ import java.text.DecimalFormat;
 import java.util.*;
 
 public class MainBrut {
+
+    private static final long MAX_TIME_MILLIS = 300000; // Maximum time in milliseconds (5 minutes)
+    private static final long startTime = System.currentTimeMillis();
     public static void main(String[] args) {
+
 
         Graph graph = new Graph();
 
@@ -73,7 +77,21 @@ public class MainBrut {
         List<Agent> agents = new ArrayList<>();
         agents.add(new Agent(1, v1, v10));
         agents.add(new Agent(2, v1, v10));
-        agents.add(new Agent(3, v11, v5));
+        agents.add(new Agent(3, v1, v10));
+        agents.add(new Agent(4, v1, v10));
+        agents.add(new Agent(5, v1, v10));
+        agents.add(new Agent(6, v1, v10));
+        agents.add(new Agent(7, v1, v10));
+        agents.add(new Agent(8, v1, v10));
+        agents.add(new Agent(9, v6, v15));
+        agents.add(new Agent(10, v6, v15));
+        agents.add(new Agent(11, v6, v15));
+        agents.add(new Agent(12, v6, v15));
+        agents.add(new Agent(13, v6, v15));
+        agents.add(new Agent(14, v6, v15));
+        agents.add(new Agent(15, v6, v15));
+
+
 
 
         List<Vertex> list_chargingS = graph.getChargingStations();
@@ -169,6 +187,11 @@ public class MainBrut {
     }
 
     private static void generateAssignments2(List<Agent> agents, List<Vertex> chargingStations, int agentIndex, List<Vertex> currentAssignment, List<List<Vertex>> result) {
+        if (System.currentTimeMillis() - startTime >= MAX_TIME_MILLIS) {
+            System.out.println("Time has passed");
+            // If time exceeds the maximum allowed time, return what you have
+            return;
+        }
         if (agentIndex == agents.size()) {
             // Check if the current assignment is unique before adding it to the result
             if (!isAssignmentUnique(result, currentAssignment)) {
