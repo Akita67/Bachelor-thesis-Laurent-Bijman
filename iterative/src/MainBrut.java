@@ -3,8 +3,9 @@ import java.util.*;
 
 public class MainBrut {
 
-    private static final long MAX_TIME_MILLIS = 300000; // Maximum time in milliseconds (5 minutes)
+    private static final long MAX_TIME_MILLIS = 180000; // Maximum time in milliseconds (5 minutes)
     private static final long startTime = System.currentTimeMillis();
+    private static Set<List<Vertex>> uniqueAssignments = new HashSet<>();
     public static void main(String[] args) {
 
 
@@ -73,7 +74,7 @@ public class MainBrut {
         graph.addEdge(v5, v10, 15.0);
         graph.addEdge(v10, v15, 15.0);
 
-
+        // Agents need to be placed in groups otherwise the pruning will not work accurately
         List<Agent> agents = new ArrayList<>();
         agents.add(new Agent(1, v1, v10));
         agents.add(new Agent(2, v1, v10));
@@ -84,12 +85,9 @@ public class MainBrut {
         agents.add(new Agent(7, v1, v10));
         agents.add(new Agent(8, v1, v10));
         agents.add(new Agent(9, v6, v15));
-        agents.add(new Agent(10, v6, v15));
-        agents.add(new Agent(11, v6, v15));
-        agents.add(new Agent(12, v6, v15));
-        agents.add(new Agent(13, v6, v15));
-        agents.add(new Agent(14, v6, v15));
-        agents.add(new Agent(15, v6, v15));
+        for (int i = 10; i < 60; i++) {
+            agents.add(new Agent(i, v6, v15));
+        }
 
 
 
@@ -118,7 +116,6 @@ public class MainBrut {
         result.add(specific); */
 
         for (List<Vertex> assignment : result) {
-            //System.out.println(assignment.get(0).getId() + " " + assignment.get(1).getId());
             boolean stop = false;
             for (Agent a : agents){
                 a.reset(starting_Pos.get((a.getId())-1));
@@ -168,41 +165,27 @@ public class MainBrut {
 
     }
 
-
-    private static void generateAssignments(List<Agent> agents, List<Vertex> chargingStations, int agentIndex, List<Vertex> currentAssignment, List<List<Vertex>> result) {
-        if (agentIndex == agents.size()) {
-            result.add(new ArrayList<>(currentAssignment));
-            return;
-        }
-
-        Agent currentAgent = agents.get(agentIndex);
-        for (Vertex chargingStation : chargingStations) {
-            // Check if there are agents that start at a same position and all end at another similar position, if that is the case then don't need to generate that possibility
-            currentAgent.setCharging_station(chargingStation);
-            currentAssignment.add(chargingStation);
-            generateAssignments(agents, chargingStations, agentIndex + 1, currentAssignment, result);
-            currentAssignment.remove(currentAssignment.size() - 1);
-            currentAgent.setCharging_station(null); // Resetting charging station assignment
-        }
-    }
-
-    private static void generateAssignments2(List<Agent> agents, List<Vertex> chargingStations, int agentIndex, List<Vertex> currentAssignment, List<List<Vertex>> result) {
+    public static void generateAssignments2(List<Agent> agents, List<Vertex> chargingStations, int agentIndex, List<Vertex> currentAssignment, List<List<Vertex>> result) {
         if (System.currentTimeMillis() - startTime >= MAX_TIME_MILLIS) {
             System.out.println("Time has passed");
             // If time exceeds the maximum allowed time, return what you have
             return;
         }
         if (agentIndex == agents.size()) {
-            // Check if the current assignment is unique before adding it to the result
-            if (!isAssignmentUnique(result, currentAssignment)) {
-                return; // Skip if not unique
+            // Convert current assignment to a List and check if it's unique
+            List<Vertex> assignment = new ArrayList<>(currentAssignment);
+            assignment.sort(new VertexComparator());
+            if (uniqueAssignments.add(assignment)) {
+                result.add(new ArrayList<>(currentAssignment));
             }
-            result.add(new ArrayList<>(currentAssignment));
             return;
         }
 
         Agent currentAgent = agents.get(agentIndex);
-        for (Vertex chargingStation : chargingStations) {
+        List<Vertex> shuffledChargingStations = new ArrayList<>(chargingStations);
+        Collections.shuffle(shuffledChargingStations); // Shuffle to introduce randomness
+
+        for (Vertex chargingStation : shuffledChargingStations) {
             currentAgent.setCharging_station(chargingStation);
             currentAssignment.add(chargingStation);
             generateAssignments2(agents, chargingStations, agentIndex + 1, currentAssignment, result);
@@ -211,58 +194,11 @@ public class MainBrut {
         }
     }
 
-    // Check if the current assignment is unique compared to existing assignments
-    private static boolean isAssignmentUnique(List<List<Vertex>> assignments, List<Vertex> currentAssignment) {
-        for (List<Vertex> assignment : assignments) {
-            if (isSameAssignment(assignment, currentAssignment)) {
-                return false; // Not unique
-            }
-        }
-        return true; // Unique
-    }
-
-    // Check if two assignments are the same (ignoring order)
-    private static boolean isSameAssignment(List<Vertex> assignment1, List<Vertex> assignment2) {
-        if (assignment1.size() != assignment2.size()) {
-            return false;
-        }
-        List<Vertex> sorted1 = new ArrayList<>(assignment1);
-        List<Vertex> sorted2 = new ArrayList<>(assignment2);
-        sorted1.sort(new VertexComparator());
-        sorted2.sort(new VertexComparator());
-        return sorted1.equals(sorted2);
-    }
-
-    // Custom comparator for sorting vertices
-    private static class VertexComparator implements Comparator<Vertex> {
+    static class VertexComparator implements Comparator<Vertex> {
         @Override
         public int compare(Vertex v1, Vertex v2) {
-            // Implement comparison logic here, for example:
-            return Integer.compare(v1.getId(), v2.getId());
+            // Implement comparison logic based on Vertex properties
+            return v1.getId() - v2.getId(); // Example comparison by ID
         }
-    }
-
-
-
-
-    private static void pruning(List<Agent> agents, List<List<Vertex>> result) {
-        // Create a set to store unique combinations of charging stations
-        Set<List<Vertex>> uniqueStations = new HashSet<>();
-
-        // Iterate over each combination of charging stations for agents
-        for (List<Vertex> stations : result) {
-            // Sort the list of charging stations for canonical representation
-            Collections.sort(stations, Comparator.comparingInt(v -> v.id));
-
-            // Check if this combination is unique
-            if (!uniqueStations.contains(stations)) {
-                // If it's unique, add it to the set of unique combinations
-                uniqueStations.add(stations);
-            }
-        }
-
-        // Replace the global list with the set of unique combinations
-        result.clear();
-        result.addAll(uniqueStations);
     }
 }
