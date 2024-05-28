@@ -3,122 +3,154 @@ import java.util.*;
 
 public class MainBrut {
 
-    private static final long MAX_TIME_MILLIS = 180000; // Maximum time in milliseconds (5 minutes)
+    private static final long MAX_TIME_MILLIS = 10000; // Maximum time in milliseconds (10 minutes)
     private static final long startTime = System.currentTimeMillis();
     private static Set<List<Vertex>> uniqueAssignments = new HashSet<>();
+    private static int counting = 0;
     public static void main(String[] args) {
-
 
         Graph graph = new Graph();
 
-// Create vertices
-        Vertex v1 = new Vertex(1);
-        Vertex v2 = new Vertex(2);v2.charging_station=true;
-        Vertex v3 = new Vertex(3);
-        Vertex v4 = new Vertex(4);v4.charging_station=true;
-        Vertex v5 = new Vertex(5);
-        Vertex v6 = new Vertex(6);
-        Vertex v7 = new Vertex(7);
-        Vertex v8 = new Vertex(8);
-        Vertex v9 = new Vertex(9);
-        Vertex v10 = new Vertex(10);
-        Vertex v11 = new Vertex(11);
-        Vertex v12 = new Vertex(12);v12.charging_station=true;v12.fast_charging=true;
-        Vertex v13 = new Vertex(13);
-        Vertex v14 = new Vertex(14);
-        Vertex v15 = new Vertex(15);
+// Create vertices representing major cities in the Netherlands
+        Vertex amsterdam = new Vertex(1);
+        Vertex rotterdam = new Vertex(2);
+        Vertex theHague = new Vertex(3);
+        Vertex utrecht = new Vertex(4);
+        Vertex eindhoven = new Vertex(5);
+        Vertex tilburg = new Vertex(6);
+        Vertex groningen = new Vertex(7);
+        Vertex almere = new Vertex(8);
+        Vertex breda = new Vertex(9);
+        Vertex nijmegen = new Vertex(10);
+        Vertex enschede = new Vertex(11);
+        Vertex haarlem = new Vertex(12);
+        Vertex arnhem = new Vertex(13);
+        Vertex amersfoort = new Vertex(14);
+        Vertex maastricht = new Vertex(15);
+        Vertex middelburg = new Vertex(16);
+        Vertex zwolle = new Vertex(17);
+        Vertex helmond = new Vertex(18);
+        Vertex ede = new Vertex(19);
+
 
 // Add vertices to the graph
-        graph.addVertex(v1);
-        graph.addVertex(v2);
-        graph.addVertex(v3);
-        graph.addVertex(v4);
-        graph.addVertex(v5);
-        graph.addVertex(v6);
-        graph.addVertex(v7);
-        graph.addVertex(v8);
-        graph.addVertex(v9);
-        graph.addVertex(v10);
-        graph.addVertex(v11);
-        graph.addVertex(v12);
-        graph.addVertex(v13);
-        graph.addVertex(v14);
-        graph.addVertex(v15);
+        graph.addVertex(amsterdam);
+        graph.addVertex(rotterdam);rotterdam.charging_station=true;
+        graph.addVertex(theHague);theHague.charging_station=true;theHague.fast_charging=true;
+        graph.addVertex(utrecht);
+        graph.addVertex(eindhoven);eindhoven.charging_station=true;
+        graph.addVertex(tilburg);
+        graph.addVertex(groningen);
+        graph.addVertex(almere);
+        graph.addVertex(breda);
+        graph.addVertex(nijmegen);
+        graph.addVertex(enschede);
+        graph.addVertex(haarlem);
+        graph.addVertex(arnhem);arnhem.charging_station=true;arnhem.fast_charging=true;
+        graph.addVertex(amersfoort);
+        graph.addVertex(maastricht);
+        graph.addVertex(middelburg);
+        graph.addVertex(zwolle);
+        graph.addVertex(helmond);
+        graph.addVertex(ede);ede.charging_station=true;
 
 
-// Add edges to the graph
-// Syntax: addEdge(Vertex source, Vertex destination, int weight)
-        graph.addEdge(v1, v2, 15.0);
-        graph.addEdge(v2, v3, 15.0);
-        graph.addEdge(v3, v4, 15.0);
-        graph.addEdge(v4, v5, 15.0);
+// Add edges representing roads between cities (approximate distances in km)
+        graph.addEdge(maastricht,eindhoven,70);
+        graph.addEdge(maastricht,helmond,69);
+        graph.addEdge(eindhoven,breda,50);
+        graph.addEdge(eindhoven,tilburg,35);
+        graph.addEdge(eindhoven,helmond,20);
+        graph.addEdge(helmond,ede,80);
+        graph.addEdge(helmond,nijmegen,60);
+        graph.addEdge(helmond,tilburg,50);
+        graph.addEdge(breda,tilburg,30);
+        graph.addEdge(breda,middelburg,68);
+        graph.addEdge(breda,rotterdam,57);
+        graph.addEdge(rotterdam,middelburg,90);
+        graph.addEdge(rotterdam,theHague,27);
+        graph.addEdge(rotterdam,utrecht,62);
+        graph.addEdge(middelburg,theHague,106);
+        graph.addEdge(utrecht,theHague,69);
+        graph.addEdge(utrecht,amsterdam,48);
+        graph.addEdge(utrecht,amersfoort,28);
+        graph.addEdge(utrecht,ede,40);
+        graph.addEdge(haarlem,theHague,60);
+        graph.addEdge(haarlem,amsterdam,30);
+        graph.addEdge(almere,amsterdam,32);
+        graph.addEdge(almere,zwolle,60);
+        graph.addEdge(almere,amersfoort,40);
+        graph.addEdge(nijmegen,arnhem,23);
+        graph.addEdge(nijmegen,ede,43);
+        graph.addEdge(arnhem,enschede,78);
+        graph.addEdge(arnhem,ede,22);
+        graph.addEdge(amersfoort,arnhem,52);
+        graph.addEdge(amersfoort,zwolle,60);
+        graph.addEdge(zwolle,groningen,72);
+        graph.addEdge(zwolle,arnhem,53);
 
-        graph.addEdge(v6, v7, 15.0);
-        graph.addEdge(v7, v8, 15.0);
-        graph.addEdge(v8, v9, 15.0);
-        graph.addEdge(v9, v10, 15.0);
 
-        graph.addEdge(v11, v12, 15.0);
-        graph.addEdge(v12, v13, 15.0);
-        graph.addEdge(v13, v14, 15.0);
-        graph.addEdge(v14, v15, 15.0);
-
-        graph.addEdge(v1, v6, 15.0);
-        graph.addEdge(v6, v11, 15.0);
-        graph.addEdge(v2, v7, 15.0);
-        graph.addEdge(v7, v12, 15.0);
-        graph.addEdge(v3, v8, 15.0);
-        graph.addEdge(v8, v13, 15.0);
-        graph.addEdge(v4, v9, 15.0);
-        graph.addEdge(v9, v14, 15.0);
-        graph.addEdge(v5, v10, 15.0);
-        graph.addEdge(v10, v15, 15.0);
-
-        // Agents need to be placed in groups otherwise the pruning will not work accurately
+// Agents need to be placed in groups otherwise the pruning will not work accurately
         List<Agent> agents = new ArrayList<>();
-        agents.add(new Agent(1, v1, v10));
-        agents.add(new Agent(2, v1, v10));
-        agents.add(new Agent(3, v1, v10));
-        agents.add(new Agent(4, v1, v10));
-        agents.add(new Agent(5, v1, v10));
-        agents.add(new Agent(6, v1, v10));
-        agents.add(new Agent(7, v1, v10));
-        agents.add(new Agent(8, v1, v10));
-        agents.add(new Agent(9, v6, v15));
-        for (int i = 10; i < 60; i++) {
-            agents.add(new Agent(i, v6, v15));
+
+        int temp = 40;
+        for (int i = 1; i < temp+1; i++) {
+            agents.add(new Agent(i, groningen, utrecht));
         }
-
-
+        for (int i = temp+1; i < 2*temp+1; i++) {
+            agents.add(new Agent(i, maastricht, utrecht));
+        }
+        for (int i = 2*temp+1; i < 3*temp+1; i++) {
+            agents.add(new Agent(i, breda, utrecht));
+        }
+        for (int i = 3*temp+1; i < 4*temp+1; i++) {
+            agents.add(new Agent(i, haarlem, utrecht));
+        }
+        for (int i = 4*temp+1; i < 5*temp+1; i++) {
+            agents.add(new Agent(i, enschede, utrecht));
+        }
 
 
         List<Vertex> list_chargingS = graph.getChargingStations();
-        List<Vertex> starting_Pos = new ArrayList<>();
-        for (Agent agent : agents){
-            starting_Pos.add(agent.currentPosition);
-        }
 
         List<List<Vertex>> result = new ArrayList<>();
         List<Vertex> currentAssignment = new ArrayList<>();
 
         generateAssignments2(agents, list_chargingS, 0, currentAssignment, result);
-        System.out.println(result.size());
-        //pruning(agents,result); //TODO pruning doesn't work accurately at the moment
+        System.out.println("number of assignments generated " + counting);
+        System.out.println("number of assignments after pruning " + result.size());
 
         double minMakeSpan = Double.MAX_VALUE;
         List<Vertex> minList = new ArrayList<>();
         double maxMakeSpan = Double.MIN_VALUE;
         List<Vertex> maxList = new ArrayList<>();
+
         /*
         result.clear();
         List<Vertex> specific = new ArrayList<>();
-        specific.add(v2);specific.add(v2);specific.add(v2);specific.add(v3);specific.add(v3);specific.add(v3);specific.add(v4);specific.add(v4);specific.add(v4);specific.add(v);
-        result.add(specific); */
+        for (int i = 0; i < 20; i++) {
+            specific.add(arnhem);
+        }
+        for (int i = 20; i < 40; i++) {
+            specific.add(ede);
+        }
+        for (int i = 40; i < 60; i++) {
+            specific.add(rotterdam);
+        }
+        for (int i = 60; i < 80; i++) {
+            specific.add(ede);
+        }
+        for (int i = 80; i < 100; i++) {
+            specific.add(ede);
+        }
+        result.add(specific);*/
+
+
 
         for (List<Vertex> assignment : result) {
             boolean stop = false;
             for (Agent a : agents){
-                a.reset(starting_Pos.get((a.getId())-1));
+                a.reset();
                 a.setCharging_station(assignment.get(a.getId()-1));
             }
             GameManager game = new GameManager();
@@ -175,6 +207,7 @@ public class MainBrut {
             // Convert current assignment to a List and check if it's unique
             List<Vertex> assignment = new ArrayList<>(currentAssignment);
             assignment.sort(new VertexComparator());
+            counting++;
             if (uniqueAssignments.add(assignment)) {
                 result.add(new ArrayList<>(currentAssignment));
             }

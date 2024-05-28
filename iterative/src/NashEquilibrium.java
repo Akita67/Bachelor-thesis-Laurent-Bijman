@@ -1,9 +1,8 @@
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
-public class Main {
+public class NashEquilibrium {
+
     public static void main(String[] args) {
-        boolean stop = false;
 
         Graph graph = new Graph();
 
@@ -88,26 +87,85 @@ public class Main {
 
 // Agents need to be placed in groups otherwise the pruning will not work accurately
         List<Agent> agents = new ArrayList<>();
-
-        for (int i = 1; i < 41; i++) {
+        int temp = 20;
+        for (int i = 1; i < temp+1; i++) {
             agents.add(new Agent(i, groningen, utrecht));
         }
-        for (int i = 41; i < 81; i++) {
+        for (int i = temp+1; i < 2*temp+1; i++) {
             agents.add(new Agent(i, maastricht, utrecht));
         }
-        for (int i = 81; i < 121; i++) {
+        for (int i = 2*temp+1; i < 3*temp+1; i++) {
             agents.add(new Agent(i, breda, utrecht));
         }
-        for (int i = 121; i < 161; i++) {
+        for (int i = 3*temp+1; i < 4*temp+1; i++) {
             agents.add(new Agent(i, haarlem, utrecht));
         }
-        for (int i = 161; i < 201; i++) {
+        for (int i = 4*temp+1; i < 5*temp+1; i++) {
             agents.add(new Agent(i, enschede, utrecht));
         }
 
+
+        List<Vertex> list_chargingS = graph.getChargingStations();
+        List<Vertex> currentAssignment = new ArrayList<>();
+
+        simple_Assign(currentAssignment,agents,list_chargingS);
+
+        int count = 0;
+        double value;
+        double minMakeSpan = Double.MAX_VALUE;
+        boolean flag = false;
+        boolean flagremain = false;
+        Vertex stockremain;
+        List<Vertex> minList = new ArrayList<>();
+
+        while(count < agents.size()){
+            stockremain = currentAssignment.get(count);
+            for (Vertex charge: list_chargingS) {
+                currentAssignment.set(count, charge);
+                value = simple_Game(currentAssignment,agents,graph,minMakeSpan);
+                //System.out.println(value);
+                if(value < minMakeSpan){
+                    minMakeSpan=value;
+                    minList = new ArrayList<>(currentAssignment);
+                    flag=true;
+                    flagremain=true;
+                    break;
+                }
+            }
+            if (!flagremain){
+                currentAssignment.set(count, stockremain);
+            }
+            count++;
+            if(count == agents.size()){
+                if (flag){
+                    count = 0;
+                    flag = false;
+                }
+            }
+        }
+
+        System.out.println("We reach an equilibrium with the makespan of " + minMakeSpan);
+        for (int i = 0; i < minList.size(); i++) {
+            System.out.print(minList.get(i).getId() + " ");
+        }
+    }
+
+
+
+    public static void simple_Assign(List<Vertex> currentAssignment, List<Agent> agents, List<Vertex> list_chargingS){
+        for (int i=0 ; i<agents.size() ; i++) {
+            currentAssignment.add(list_chargingS.get(0));
+        }
+    }
+    public static double simple_Game(List<Vertex> assignment, List<Agent> agents, Graph graph, double minMakeSpan){
+        boolean stop = false;
+        for (Agent a : agents){
+            a.reset();
+            a.setCharging_station(assignment.get(a.getId()-1));
+        }
         GameManager game = new GameManager();
         while(!stop){
-            game.determineNextMove(agents, graph);
+            game.BrutdetermineNextMove(agents, graph);
             for(Agent agent: agents){
                 if(agent.currentPosition.equals(agent.destination)){
                     stop = true;
@@ -124,6 +182,15 @@ public class Main {
                 max_time = agent.current_distance;
             }
         }
-        System.out.println("The makespan of this problem is " + max_time);
+        //System.out.println("The makespan of this problem is " + max_time);
+        if(max_time<minMakeSpan){
+            minMakeSpan = max_time;
+            System.out.println("The new optimum " + minMakeSpan);
+            for (int i = 0; i < assignment.size(); i++) {
+                System.out.print(assignment.get(i).getId() + " ");
+            }
+            System.out.println();
+        }
+        return minMakeSpan;
     }
 }
