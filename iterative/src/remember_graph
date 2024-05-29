@@ -264,20 +264,19 @@ for (int i = 6; i < 11; i++) {
 
 // Agents need to be placed in groups otherwise the pruning will not work accurately
         List<Agent> agents = new ArrayList<>();
-
-        for (int i = 1; i < 21; i++) {
+        int temp = 20;
+        for (int i = 1; i < temp+1; i++) {
             agents.add(new Agent(i, groningen, utrecht));
         }
-        for (int i = 21; i < 41; i++) {
+        for (int i = temp+1; i < 2*temp+1; i++) {
             agents.add(new Agent(i, maastricht, utrecht));
         }
-        for (int i = 41; i < 61; i++) {
+        for (int i = 2*temp+1; i < 3*temp+1; i++) {
             agents.add(new Agent(i, breda, utrecht));
         }
-        for (int i = 61; i < 81; i++) {
+        for (int i = 3*temp+1; i < 4*temp+1; i++) {
             agents.add(new Agent(i, haarlem, utrecht));
         }
-        for (int i = 81; i < 101; i++) {
+        for (int i = 4*temp+1; i < 5*temp+1; i++) {
             agents.add(new Agent(i, enschede, utrecht));
         }
-
