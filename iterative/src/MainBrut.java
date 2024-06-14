@@ -1,4 +1,3 @@
-import java.text.DecimalFormat;
 import java.util.*;
 
 public class MainBrut {
@@ -104,7 +103,6 @@ public class MainBrut {
                     max_time = agent.current_distance;
                 }
             }
-            //System.out.println("The makespan of this problem is " + max_time);
             if(max_time<minMakeSpan){
                 minMakeSpan = max_time;
                 minList = assignment;
@@ -174,13 +172,5 @@ public class MainBrut {
         }
 
         return sb.toString();
-    }
-
-    static class VertexComparator implements Comparator<Vertex> {
-        @Override
-        public int compare(Vertex v1, Vertex v2) {
-            // Implement comparison logic based on Vertex properties
-            return v1.getId() - v2.getId(); // Example comparison by ID
-        }
     }
 }

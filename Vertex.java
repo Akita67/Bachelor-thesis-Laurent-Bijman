@@ -1,6 +1,4 @@
-import java.io.Serializable;
 import java.util.List;
-import java.util.Queue;
 import java.util.LinkedList;
 class Vertex {
     protected int id;

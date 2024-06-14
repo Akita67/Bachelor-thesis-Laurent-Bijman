@@ -1,4 +1,3 @@
-import java.io.Serializable;
 
 public class Edge{
     protected Vertex source;

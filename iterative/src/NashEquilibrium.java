@@ -127,7 +127,6 @@ public class NashEquilibrium {
             for (Vertex charge: list_chargingS) {
                 currentAssignment.set(count, charge);
                 value = simple_Game(currentAssignment,agents,graph,minMakeSpan);
-                //System.out.println(value);
                 if(value < minMakeSpan){
                     minMakeSpan=value;
                     minList = new ArrayList<>(currentAssignment);
@@ -186,7 +185,6 @@ public class NashEquilibrium {
                 max_time = agent.current_distance;
             }
         }
-        //System.out.println("The makespan of this problem is " + max_time);
         if(max_time<minMakeSpan){
             minMakeSpan = max_time;
             System.out.println("The new optimum " + minMakeSpan);

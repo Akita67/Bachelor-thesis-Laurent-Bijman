@@ -101,7 +101,6 @@ public class SelfishNashEquilibrium {
             for (Vertex charge: list_chargingS) {
                 currentAssignment.set(count, charge);
                 value = simple_Game(currentAssignment,agents,graph,minMakeSpan,agents.get(count));
-                //System.out.println(value);
                 if(value < minMakeSpan.get(count)){
                     minMakeSpan.set(count,value);
                     minList = new ArrayList<>(currentAssignment);
@@ -156,9 +155,7 @@ public class SelfishNashEquilibrium {
             }
         }
         double max_time = currentAgent.current_distance;
-        //System.out.println("The makespan of this problem is " + max_time);
         if(max_time<minMakeSpan.get(currentAgent.getId()-1)){
-            //minMakeSpan.set(currentAgent.getId()-1, max_time);
             System.out.println("The new selfish improvement from " + minMakeSpan.get(currentAgent.getId()-1) + " to " + max_time);
             for (int i = 0; i < assignment.size(); i++) {
                 System.out.print(assignment.get(i).getId() + " ");

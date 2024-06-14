@@ -128,7 +128,6 @@ public class Normal {
         List<Vertex> specific = new ArrayList<>();
         List<Agent> agents = new ArrayList<>();
         int count=0;
-        int temp = 200;
         for (int i = 1; i < 68; i++) {
             agents.add(new Agent(i, v1, v10));
             specific.add(groupChar.get(0).get(count%groupChar.get(0).size()));

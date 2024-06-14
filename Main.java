@@ -43,19 +43,5 @@ public class Main {
         List<Vertex> shortestPath = graph.shortestPath(v1, v6);
         Agent a1 = new Agent(1);
         a1.travel(graph, shortestPath);
-
-
-
-
-        /*
-        for (int i = 1; i <= 4; i++) {
-            List<Vertex> shortestPath1 = graph.shortestPath(v1, v6);
-            Agent a1 = new Agent(4);
-            System.out.println("Agent " + i + " is traveling:");
-            a1.travel(graph, shortestPath1);
-        }
-        */
-
-
     }
 }
