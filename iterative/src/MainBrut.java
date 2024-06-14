@@ -3,29 +3,23 @@ import java.util.*;
 
 public class MainBrut {
 
-    private static final long MAX_TIME_MILLIS = 1000; // Maximum time in milliseconds (10 minutes)
+    private static final long MAX_TIME_MILLIS = 2000; // Maximum time in milliseconds (10 minutes)
     private static final long startTime = System.currentTimeMillis();
-    private static Set<List<Vertex>> uniqueAssignments = new HashSet<>();
+    private static Set<String> uniqueAssignments = new HashSet<String>();
     private static int counting = 0;
     public static void main(String[] args) {
 
         Graph graph = new Graph();
 
+// Create vertices
         Vertex v1 = new Vertex(1);
         Vertex v2 = new Vertex(2);
-        Vertex v3 = new Vertex(3);v3.charging_station=true;v3.fast_charging=true;
-        Vertex v4 = new Vertex(4);
-        Vertex v5 = new Vertex(5);
+        Vertex v3 = new Vertex(3);
+        Vertex v4 = new Vertex(4);v4.charging_station=true;
+        Vertex v5 = new Vertex(5);v5.charging_station=true;v5.fast_charging=true;
         Vertex v6 = new Vertex(6);
-        Vertex v7 = new Vertex(7);v7.charging_station=true;
-        Vertex v8 = new Vertex(8);
-        Vertex v9 = new Vertex(9);v9.charging_station=true;
-        Vertex v10 = new Vertex(10);
-        Vertex v11 = new Vertex(11);
-        Vertex v12 = new Vertex(12);
-        Vertex v13 = new Vertex(13);v13.charging_station=true;v13.fast_charging=true;
-        Vertex v14 = new Vertex(14);
-        Vertex v15 = new Vertex(15);
+        Vertex v7 = new Vertex(7);
+
 
 // Add vertices to the graph
         graph.addVertex(v1);
@@ -35,57 +29,26 @@ public class MainBrut {
         graph.addVertex(v5);
         graph.addVertex(v6);
         graph.addVertex(v7);
-        graph.addVertex(v8);
-        graph.addVertex(v9);
-        graph.addVertex(v10);
-        graph.addVertex(v11);
-        graph.addVertex(v12);
-        graph.addVertex(v13);
-        graph.addVertex(v14);
-        graph.addVertex(v15);
 
 
 // Add edges to the graph
 // Syntax: addEdge(Vertex source, Vertex destination, int weight)
-        graph.addEdge(v1, v2, 50.0);
+        graph.addEdge(v1, v2, 100.0);
         graph.addEdge(v2, v3, 50.0);
         graph.addEdge(v3, v4, 50.0);
-        graph.addEdge(v4, v5, 50.0);
+        graph.addEdge(v4, v5, 5.0);
 
-        graph.addEdge(v6, v7, 50.0);
-        graph.addEdge(v7, v8, 50.0);
-        graph.addEdge(v8, v9, 50.0);
-        graph.addEdge(v9, v10, 50.0);
-
-        graph.addEdge(v11, v12, 50.0);
-        graph.addEdge(v12, v13, 50.0);
-        graph.addEdge(v13, v14, 50.0);
-        graph.addEdge(v14, v15, 50.0);
-
-        graph.addEdge(v1, v6, 50.0);
-        graph.addEdge(v6, v11, 50.0);
-        graph.addEdge(v2, v7, 50.0);
-        graph.addEdge(v7, v12, 50.0);
-        graph.addEdge(v3, v8, 50.0);
-        graph.addEdge(v8, v13, 50.0);
-        graph.addEdge(v4, v9, 50.0);
-        graph.addEdge(v9, v14, 50.0);
-        graph.addEdge(v5, v10, 50.0);
-        graph.addEdge(v10, v15, 50.0);
+        graph.addEdge(v4, v6, 10.0);
+        graph.addEdge(v5, v7, 10.0);
 
 
 
         List<Agent> agents = new ArrayList<>();
-        int temp = 1;
-        for (int i = 1; i < temp+1; i++) {
-            agents.add(new Agent(i, v1, v10));
+        for (int i = 1; i < 101; i++) {
+            agents.add(new Agent(i, v1, v6));
         }
-        for (int i = temp+1; i < 2*temp+1; i++) {
-            agents.add(new Agent(i, v11, v5));
-
-        }
-        for (int i = 2*temp+1; i < 3*temp+1; i++) {
-            agents.add(new Agent(i, v6, v15));
+        for (int i = 101; i < 201; i++) {
+            agents.add(new Agent(i, v1, v7));
         }
 
 
@@ -100,21 +63,19 @@ public class MainBrut {
 
         double minMakeSpan = Double.MAX_VALUE;
         List<Vertex> minList = new ArrayList<>();
-        double maxMakeSpan = Double.MIN_VALUE;
-        List<Vertex> maxList = new ArrayList<>();
 
-        /*
+
         result.clear();
-        int alloc = 34;
+
         List<Vertex> specific = new ArrayList<>();
-        for (int i = 0; i < alloc; i++) {
+        for (int i = 0; i < 100; i++) {
             specific.add(v4);
         }
-        for (int i = alloc; i < 100; i++) {
+        for (int i = 0; i < 100; i++) {
             specific.add(v5);
         }
         result.add(specific);
-         */
+
 
 
 
@@ -148,24 +109,16 @@ public class MainBrut {
                 minMakeSpan = max_time;
                 minList = assignment;
                 System.out.println("The new optimum " + minMakeSpan);
-            }
-            if(max_time>maxMakeSpan){
-                maxMakeSpan = max_time;
-                maxList = assignment;
-                System.out.println("The new worst " + maxMakeSpan);
+                for (Vertex a:minList) {
+                    System.out.print(a.getId() + " ");
+                }
+                System.out.println();
             }
         }
         System.out.println("The Optimum makespan is " + minMakeSpan);
         for (int i = 0; i < minList.size(); i++) {
             System.out.print(minList.get(i).getId() + " ");
         }
-        System.out.println('\n' + "The worst makespan is " + maxMakeSpan);
-        for (int i = 0; i < minList.size(); i++) {
-            System.out.print(maxList.get(i).getId() + " ");
-        }
-        DecimalFormat df = new DecimalFormat("#.00");
-        System.out.println('\n' + "PoA is : " + df.format(maxMakeSpan/minMakeSpan));
-
     }
 
     public static void generateAssignments2(List<Agent> agents, List<Vertex> chargingStations, int agentIndex, List<Vertex> currentAssignment, List<List<Vertex>> result) {
@@ -175,11 +128,10 @@ public class MainBrut {
             return;
         }
         if (agentIndex == agents.size()) {
-            // Convert current assignment to a List and check if it's unique
-            List<Vertex> assignment = new ArrayList<>(currentAssignment);
-            assignment.sort(new VertexComparator());
+            // Convert current assignment to a unique string representation including start and end positions
+            String assignmentStr = getAssignmentString(agents, currentAssignment);
             counting++;
-            if (uniqueAssignments.add(assignment)) {
+            if (uniqueAssignments.add(assignmentStr)) {
                 result.add(new ArrayList<>(currentAssignment));
             }
             return;
@@ -196,6 +148,32 @@ public class MainBrut {
             currentAssignment.remove(currentAssignment.size() - 1);
             currentAgent.setCharging_station(null); // Resetting charging station assignment
         }
+    }
+    private static String getAssignmentString(List<Agent> agents, List<Vertex> assignment) {
+        // Group agents by their start and end positions
+        Map<String, List<Vertex>> groupedAssignments = new HashMap<>();
+
+        for (int i = 0; i < agents.size(); i++) {
+            Agent agent = agents.get(i);
+            Vertex chargingStation = assignment.get(i);
+            String groupKey = agent.getStart_vertex().getId() + "-" + agent.getDestination_vertex().getId();
+
+            groupedAssignments.computeIfAbsent(groupKey, k -> new ArrayList<>()).add(chargingStation);
+        }
+
+        // Create a string representation of grouped assignments, sorting within each group
+        StringBuilder sb = new StringBuilder();
+        for (Map.Entry<String, List<Vertex>> entry : groupedAssignments.entrySet()) {
+            sb.append(entry.getKey()).append(":");
+            List<Vertex> stations = entry.getValue();
+            stations.sort(Comparator.comparingInt(Vertex::getId));
+            for (Vertex station : stations) {
+                sb.append(station.getId()).append(",");
+            }
+            sb.append(";");
+        }
+
+        return sb.toString();
     }
 
     static class VertexComparator implements Comparator<Vertex> {

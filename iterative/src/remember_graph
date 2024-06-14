@@ -62,7 +62,8 @@ for (int i = 6; i < 11; i++) {
 
 
         List<Agent> agents = new ArrayList<>();
-        for (int i = 1; i < 21; i++) {
+        int temp = 200;
+        for (int i = 1; i < temp+1; i++) {
             agents.add(new Agent(i, v1, v6));
         }
 
@@ -132,8 +133,36 @@ graph.addEdge(v10, v15, 50.0);
 
 
 List<Agent> agents = new ArrayList<>();
-agents.add(new Agent(1, v5, v6));
-agents.add(new Agent(2, v5, v6));
+        for (int i = 1; i < temp+1; i++) {
+            agents.add(new Agent(i, v5, v6));
+        }
+        for (int i = temp+1; i < 2*temp+1; i++) {
+            agents.add(new Agent(i, v4, v12 ));
+        }
+        for (int i = 2*temp+1; i < 3*temp+1; i++) {
+            agents.add(new Agent(i, v1, v8));
+        }
+        for (int i = 3*temp+1; i < 4*temp+1; i++) {
+            agents.add(new Agent(i, v1, v15));
+        }
+        for (int i = 4*temp+1; i < 5*temp+1; i++) {
+            agents.add(new Agent(i, v11, v4));
+        }
+        for (int i = 5*temp+1; i < 6*temp+1; i++) {
+            agents.add(new Agent(i, v14, v6));
+        }
+        for (int i = 6*temp+1; i < 7*temp+1; i++) {
+            agents.add(new Agent(i, v12, v1));
+        }
+        for (int i = 7*temp+1; i < 8*temp+1; i++) {
+            agents.add(new Agent(i, v8, v1));
+        }
+        for (int i = 8*temp+1; i < 9*temp+1; i++) {
+            agents.add(new Agent(i, v8, v10));
+        }
+        for (int i = 9*temp+1; i < 10*temp+1; i++) {
+            agents.add(new Agent(i, v8, v12));
+        }
 
 
         // Line with at the 2 ends we have charging points and intersection to their destination
@@ -280,3 +309,31 @@ for (int i = 6; i < 11; i++) {
         for (int i = 4*temp+1; i < 5*temp+1; i++) {
             agents.add(new Agent(i, enschede, utrecht));
         }
+
+        //No Pure Nash Equilibrium Graph
+// Create vertices
+        Vertex v1 = new Vertex(1);
+        Vertex v2 = new Vertex(2);
+        Vertex v3 = new Vertex(3);v3.charging_station=true;
+        Vertex v4 = new Vertex(4);
+        Vertex v5 = new Vertex(5);
+
+// Add vertices to the graph
+        graph.addVertex(v1);
+        graph.addVertex(v2);
+        graph.addVertex(v3);
+        graph.addVertex(v4);
+        graph.addVertex(v5);
+
+
+// Add edges to the graph
+// Syntax: addEdge(Vertex source, Vertex destination, int weight)
+        graph.addEdge(v1, v2, 50.0);
+        graph.addEdge(v2, v3, 50.0);
+        graph.addEdge(v3, v4, 50.0);
+        graph.addEdge(v4, v5, 50.0);
+
+
+        List<Agent> agents = new ArrayList<>();
+        agents.add(new Agent(1, v1, v5));
+        agents.add(new Agent(2, v5, v1));

@@ -7,6 +7,7 @@ public class Main {
 
         Graph graph = new Graph();
 
+// Create vertices
         Vertex v1 = new Vertex(1);
         Vertex v2 = new Vertex(2);
         Vertex v3 = new Vertex(3);v3.charging_station=true;v3.fast_charging=true;
@@ -69,15 +70,41 @@ public class Main {
         graph.addEdge(v5, v10, 50.0);
         graph.addEdge(v10, v15, 50.0);
 
-
+        int temp=20;
         List<Agent> agents = new ArrayList<>();
-        int temp = 100;
         for (int i = 1; i < temp+1; i++) {
-            agents.add(new Agent(i, v1, v6));
+            agents.add(new Agent(i, v5, v6));
         }
         for (int i = temp+1; i < 2*temp+1; i++) {
-            agents.add(new Agent(i, v1, v7));
+            agents.add(new Agent(i, v4, v12 ));
         }
+        for (int i = 2*temp+1; i < 3*temp+1; i++) {
+            agents.add(new Agent(i, v1, v8));
+        }
+        for (int i = 3*temp+1; i < 4*temp+1; i++) {
+            agents.add(new Agent(i, v1, v15));
+        }
+        for (int i = 4*temp+1; i < 5*temp+1; i++) {
+            agents.add(new Agent(i, v11, v4));
+        }
+        for (int i = 5*temp+1; i < 6*temp+1; i++) {
+            agents.add(new Agent(i, v14, v6));
+        }
+        for (int i = 6*temp+1; i < 7*temp+1; i++) {
+            agents.add(new Agent(i, v12, v1));
+        }
+        for (int i = 7*temp+1; i < 8*temp+1; i++) {
+            agents.add(new Agent(i, v8, v1));
+        }
+        for (int i = 8*temp+1; i < 9*temp+1; i++) {
+            agents.add(new Agent(i, v8, v10));
+        }
+        for (int i = 9*temp+1; i < 10*temp+1; i++) {
+            agents.add(new Agent(i, v8, v12));
+        }
+
+
+
 
         GameManager game = new GameManager();
         while(!stop){
@@ -94,10 +121,14 @@ public class Main {
         }
         double max_time = Double.MIN_VALUE;
         for(Agent agent: agents){
+            System.out.println(agent.current_distance);
             if(agent.current_distance>max_time){
                 max_time = agent.current_distance;
             }
         }
         System.out.println("The makespan of this problem is " + max_time);
+        for (Agent a: agents) {
+            System.out.print(a.getCharging_station().getId() + " ");
+        }
     }
 }

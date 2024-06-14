@@ -7,7 +7,7 @@ public class Normal {
     public static void main(String[] args) {
 
         Graph graph = new Graph();
-
+// Create vertices
         Vertex v1 = new Vertex(1);
         Vertex v2 = new Vertex(2);
         Vertex v3 = new Vertex(3);v3.charging_station=true;v3.fast_charging=true;
@@ -70,13 +70,16 @@ public class Normal {
         graph.addEdge(v5, v10, 50.0);
         graph.addEdge(v10, v15, 50.0);
 
+
+
+
         List<List<Agent>> groupAgent = new ArrayList<>();
         List<Agent> agents1 = new ArrayList<>();
-        agents1.add(new Agent(1, v1, v10));groupAgent.add(agents1);
+        agents1.add(new Agent(1,v1, v10));;groupAgent.add(agents1);
         List<Agent> agents2 = new ArrayList<>();
-        agents2.add(new Agent(2, v11, v5));groupAgent.add(agents2);
+        agents2.add(new Agent(1,v11, v5));;groupAgent.add(agents2);
         List<Agent> agents3 = new ArrayList<>();
-        agents3.add(new Agent(3, v6, v15));groupAgent.add(agents3);
+        agents3.add(new Agent(1,v6, v15));;groupAgent.add(agents3);
 
         List<Vertex> list_chargingS = graph.getChargingStations();
         List<List<Vertex>> groupChar = new ArrayList<>();
@@ -124,25 +127,26 @@ public class Normal {
         List<List<Vertex>> result = new ArrayList<>();
         List<Vertex> specific = new ArrayList<>();
         List<Agent> agents = new ArrayList<>();
-        int count=1;
-        int temp = 1;
-        for (int i = 1; i < temp+1; i++) {
+        int count=0;
+        int temp = 200;
+        for (int i = 1; i < 68; i++) {
             agents.add(new Agent(i, v1, v10));
             specific.add(groupChar.get(0).get(count%groupChar.get(0).size()));
             count++;
         }
-        count=1;
-        for (int i = temp+1; i < 2*temp+1; i++) {
+        count=0;
+        for (int i = 68; i < 135; i++) {
             agents.add(new Agent(i, v11, v5));
             specific.add(groupChar.get(1).get(count%groupChar.get(1).size()));
             count++;
         }
-        count=1;
-        for (int i = 2*temp+1; i < 3*temp+1; i++) {
+        count=0;
+        for (int i = 135; i < 201; i++) {
             agents.add(new Agent(i, v6, v15));
             specific.add(groupChar.get(2).get(count%groupChar.get(2).size()));
             count++;
         }
+
 
         result.add(specific);
         for (List<Vertex> assignment : result) {
@@ -171,6 +175,9 @@ public class Normal {
                 }
             }
             System.out.println("This is the makespan of a normal behavior " + max_time);
+        }
+        for (Vertex a : specific) {
+            System.out.print(a.getId() + " ");
         }
     }
 }
