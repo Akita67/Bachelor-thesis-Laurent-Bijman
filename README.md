@@ -1,5 +1,3 @@
-Here's a draft for your README file based on the information you've provided:
-
 ---
 
 # Strategic Routing and Charging: Minimizing Makespan In Electric Car Networks Through Game Theoretic Models
