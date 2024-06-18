@@ -60,10 +60,4 @@ This project requires Java to be installed on your system.
 5. Push to the branch (`git push origin feature-branch`).
 6. Open a pull request.
 
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
 ---
-
-Feel free to customize any sections or add more details as needed! If you have any additional information or specific preferences, let me know, and I can adjust the README accordingly.

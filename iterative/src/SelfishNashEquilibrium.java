@@ -5,76 +5,102 @@ public class SelfishNashEquilibrium {
     public static void main(String[] args) {
 
         Graph graph = new Graph();
-// Create vertices
-        Vertex v1 = new Vertex(1);
-        Vertex v2 = new Vertex(2);
-        Vertex v3 = new Vertex(3);
-        Vertex v4 = new Vertex(4);v4.charging_station=true;
-        Vertex v5 = new Vertex(5);
-        Vertex v6 = new Vertex(6);
-        Vertex v7 = new Vertex(7);
-        Vertex v8 = new Vertex(8);v8.charging_station=true;
-        Vertex v9 = new Vertex(9);
-        Vertex v10 = new Vertex(10);
-        Vertex v11 = new Vertex(11);
-        Vertex v12 = new Vertex(12);
-        Vertex v13 = new Vertex(13);
-        Vertex v14 = new Vertex(14);v14.charging_station=true;
-        Vertex v15 = new Vertex(15);
+// Create vertices representing major cities in the Netherlands
+        Vertex amsterdam = new Vertex(1);
+        Vertex rotterdam = new Vertex(2);
+        Vertex theHague = new Vertex(3);
+        Vertex utrecht = new Vertex(4);
+        Vertex eindhoven = new Vertex(5);
+        Vertex tilburg = new Vertex(6);
+        Vertex groningen = new Vertex(7);
+        Vertex almere = new Vertex(8);
+        Vertex breda = new Vertex(9);
+        Vertex nijmegen = new Vertex(10);
+        Vertex enschede = new Vertex(11);
+        Vertex haarlem = new Vertex(12);
+        Vertex arnhem = new Vertex(13);
+        Vertex amersfoort = new Vertex(14);
+        Vertex maastricht = new Vertex(15);
+        Vertex middelburg = new Vertex(16);
+        Vertex zwolle = new Vertex(17);
+        Vertex helmond = new Vertex(18);
+        Vertex ede = new Vertex(19);
+
 
 // Add vertices to the graph
-        graph.addVertex(v1);
-        graph.addVertex(v2);
-        graph.addVertex(v3);
-        graph.addVertex(v4);
-        graph.addVertex(v5);
-        graph.addVertex(v6);
-        graph.addVertex(v7);
-        graph.addVertex(v8);
-        graph.addVertex(v9);
-        graph.addVertex(v10);
-        graph.addVertex(v11);
-        graph.addVertex(v12);
-        graph.addVertex(v13);
-        graph.addVertex(v14);
-        graph.addVertex(v15);
+        graph.addVertex(amsterdam);
+        graph.addVertex(rotterdam);rotterdam.charging_station=true;
+        graph.addVertex(theHague);theHague.charging_station=true;theHague.fast_charging=true;
+        graph.addVertex(utrecht);
+        graph.addVertex(eindhoven);eindhoven.charging_station=true;
+        graph.addVertex(tilburg);
+        graph.addVertex(groningen);
+        graph.addVertex(almere);
+        graph.addVertex(breda);
+        graph.addVertex(nijmegen);
+        graph.addVertex(enschede);
+        graph.addVertex(haarlem);
+        graph.addVertex(arnhem);arnhem.charging_station=true;arnhem.fast_charging=true;
+        graph.addVertex(amersfoort);
+        graph.addVertex(maastricht);
+        graph.addVertex(middelburg);
+        graph.addVertex(zwolle);
+        graph.addVertex(helmond);
+        graph.addVertex(ede);ede.charging_station=true;
 
 
-// Add edges to the graph
-// Syntax: addEdge(Vertex source, Vertex destination, int weight)
-        graph.addEdge(v1, v2, 50.0);
-        graph.addEdge(v2, v3, 50.0);
-        graph.addEdge(v3, v4, 50.0);
-        graph.addEdge(v4, v5, 50.0);
+// Add edges representing roads between cities (approximate distances in km)
+        graph.addEdge(maastricht,eindhoven,70);
+        graph.addEdge(maastricht,helmond,69);
+        graph.addEdge(eindhoven,breda,50);
+        graph.addEdge(eindhoven,tilburg,35);
+        graph.addEdge(eindhoven,helmond,20);
+        graph.addEdge(helmond,ede,80);
+        graph.addEdge(helmond,nijmegen,60);
+        graph.addEdge(helmond,tilburg,50);
+        graph.addEdge(breda,tilburg,30);
+        graph.addEdge(breda,middelburg,68);
+        graph.addEdge(breda,rotterdam,57);
+        graph.addEdge(rotterdam,middelburg,90);
+        graph.addEdge(rotterdam,theHague,27);
+        graph.addEdge(rotterdam,utrecht,62);
+        graph.addEdge(middelburg,theHague,106);
+        graph.addEdge(utrecht,theHague,69);
+        graph.addEdge(utrecht,amsterdam,48);
+        graph.addEdge(utrecht,amersfoort,28);
+        graph.addEdge(utrecht,ede,40);
+        graph.addEdge(haarlem,theHague,60);
+        graph.addEdge(haarlem,amsterdam,30);
+        graph.addEdge(almere,amsterdam,32);
+        graph.addEdge(almere,zwolle,60);
+        graph.addEdge(almere,amersfoort,40);
+        graph.addEdge(nijmegen,arnhem,23);
+        graph.addEdge(nijmegen,ede,43);
+        graph.addEdge(arnhem,enschede,78);
+        graph.addEdge(arnhem,ede,22);
+        graph.addEdge(amersfoort,arnhem,52);
+        graph.addEdge(amersfoort,zwolle,60);
+        graph.addEdge(zwolle,groningen,72);
+        graph.addEdge(zwolle,arnhem,53);
 
-        graph.addEdge(v6, v7, 50.0);
-        graph.addEdge(v7, v8, 50.0);
-        graph.addEdge(v8, v9, 50.0);
-        graph.addEdge(v9, v10, 50.0);
 
-        graph.addEdge(v11, v12, 50.0);
-        graph.addEdge(v12, v13, 50.0);
-        graph.addEdge(v13, v14, 50.0);
-        graph.addEdge(v14, v15, 50.0);
-
-        graph.addEdge(v1, v6, 50.0);
-        graph.addEdge(v6, v11, 50.0);
-        graph.addEdge(v2, v7, 50.0);
-        graph.addEdge(v7, v12, 50.0);
-        graph.addEdge(v3, v8, 50.0);
-        graph.addEdge(v8, v13, 50.0);
-        graph.addEdge(v4, v9, 50.0);
-        graph.addEdge(v9, v14, 50.0);
-        graph.addEdge(v5, v10, 50.0);
-        graph.addEdge(v10, v15, 50.0);
-
-
+// Agents need to be placed in groups otherwise the pruning will not work accurately
         List<Agent> agents = new ArrayList<>();
-        for (int i = 1; i < 2; i++) {
-            agents.add(new Agent(i, v1, v6));
+        int temp = 2;
+        for (int i = 1; i < temp+1; i++) {
+            agents.add(new Agent(i, groningen, utrecht));
         }
-        for (int i = 2; i < 3; i++) {
-            agents.add(new Agent(i, v1, v7));
+        for (int i = temp+1; i < 2*temp+1; i++) {
+            agents.add(new Agent(i, maastricht, utrecht));
+        }
+        for (int i = 2*temp+1; i < 3*temp+1; i++) {
+            agents.add(new Agent(i, breda, utrecht));
+        }
+        for (int i = 3*temp+1; i < 4*temp+1; i++) {
+            agents.add(new Agent(i, haarlem, utrecht));
+        }
+        for (int i = 4*temp+1; i < 5*temp+1; i++) {
+            agents.add(new Agent(i, enschede, utrecht));
         }
 
 
@@ -156,11 +182,14 @@ public class SelfishNashEquilibrium {
         }
         double max_time = currentAgent.current_distance;
         if(max_time<minMakeSpan.get(currentAgent.getId()-1)){
+            /*
             System.out.println("The new selfish improvement from " + minMakeSpan.get(currentAgent.getId()-1) + " to " + max_time);
             for (int i = 0; i < assignment.size(); i++) {
                 System.out.print(assignment.get(i).getId() + " ");
             }
             System.out.println();
+
+             */
         }
         return max_time;
     }

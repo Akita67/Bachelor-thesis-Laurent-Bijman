@@ -124,10 +124,10 @@ class GameManager {
 
         }
         if(minpath == null){
-            System.out.println("the agent " + (nextMoveAgent.getId()) + " stays in " + nextMoveAgent.currentPosition.id);
+            //System.out.println("the agent " + (nextMoveAgent.getId()) + " stays in " + nextMoveAgent.currentPosition.id);
         }
         else{
-            System.out.println("the agent " + (nextMoveAgent.getId()) + " goes to " + (minpath.get(1).getId()));
+            //System.out.println("the agent " + (nextMoveAgent.getId()) + " goes to " + (minpath.get(1).getId()));
             nextMoveAgent.currentPosition = minpath.get(1);
         }
         nextMoveAgent.current_distance = minTotalCost;
